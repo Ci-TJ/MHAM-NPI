@@ -38,7 +38,7 @@ def get_data(data_name, seed=1608):
             x = np.random.randint(len(rna))
             y = np.random.randint(len(pro))
             all_data.append([0] + rna_mer[rna[x]] + pro_mer[pro[y]])
-            Generate pos and neg pairs
+            #Generate pos and neg pairs
             df.loc[i] = [rna[x], pro[y], "0"]
             
     if data_name == 'NPInter2':
