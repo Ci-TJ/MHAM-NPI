@@ -70,7 +70,7 @@ for epoch in range(epoches):
         optimizer.step()
         total_loss_epoch += loss.item()
         total_tmp += 1
-    auc, sen, pre, F1 = get_result(test_loader, model)
+    auc, sen, pre, spe, npv, acc, F1 = get_result(test_loader, model)
     print('epoch/epoches: {}/{}, train loss: {:.5f}, '
           'test auc: {:.4f}, sen: {:.4f}, pre: {:.4f}, spe: {:.4f}, npv: {:.4f}, acc: {:.4f}, f1: {:.4f}'.format(epoch, epoches, total_loss_epoch / total_tmp,
                                                                           auc, sen, pre, spe, npv, acc, F1))
