@@ -12,7 +12,12 @@ data_name = 'NPInter2'
 
 sparse_feature = ['R' + str(i) for i in range(1, 257)]
 dense_feature = ['P' + str(i) for i in range(1, 401)]
-col_names = ['label'] + dense_feature + sparse_feature
+#col_names = ['label'] + dense_feature + sparse_feature
+#NPInter2 and other datasets is RNA-protein-label, but RPI488 and RPI1807 is protein-RNA-label.
+if data_name == "RPI488" or "RPI1807":
+    col_names = ['label'] + dense_feature + sparse_feature
+else:
+    col_names = ['label'] +  sparse_feature + dense_feature #Seager
 data = pd.read_csv('data/{}/sample.txt'.format(data_name), names=col_names, sep='\t')
 
 data[sparse_feature] = data[sparse_feature].fillna('-1', )
@@ -50,7 +55,7 @@ model = MHAM(feat_sizes, embedding_size, dnn_feature_columns).cuda()
 loss_func = nn.BCELoss(reduction='mean').cuda()
 optimizer = torch.optim.Adam(model.parameters(), lr=5e-4, weight_decay=1e-6)
 
-epoches = 200
+epoches = 100
 for epoch in range(epoches):
     total_loss_epoch = 0.0
     total_tmp = 0
@@ -67,6 +72,6 @@ for epoch in range(epoches):
         total_tmp += 1
     auc, sen, pre, F1 = get_result(test_loader, model)
     print('epoch/epoches: {}/{}, train loss: {:.5f}, '
-          'test auc: {:.3f}, sen: {:.3f}, pre: {:.3f}, f1: {:.3f}'.format(epoch, epoches, total_loss_epoch / total_tmp,
-                                                                          auc, sen, pre, F1))
+          'test auc: {:.4f}, sen: {:.4f}, pre: {:.4f}, spe: {:.4f}, npv: {:.4f}, acc: {:.4f}, f1: {:.4f}'.format(epoch, epoches, total_loss_epoch / total_tmp,
+                                                                          auc, sen, pre, spe, npv, acc, F1))
 
