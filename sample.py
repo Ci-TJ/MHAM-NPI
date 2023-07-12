@@ -30,13 +30,14 @@ def get_data(data_name, seed=1608):
 
     all_data = []
     df = pd.DataFrame(columns=interaction.columns)
+    labels = list(set(interaction["label"]))
     for i in range(len(interaction)):
         rna_name = interaction["RNA names"][i]
         pro_name = interaction["Protein names"][i]
         all_data.append([interaction["label"][i]] + rna_mer[rna_name] + pro_mer[pro_name])
         #if data_name == 'NPInter2':
-        if len(set(interaction["label"])) < 2:
-            if set(interaction["label"])[0] == 1 or set(interaction["label"])[0] == "1":
+        if len(labels) < 2:
+            if labels[0] == 1 or labels[0] == "1":
                 negLabel = "0"
             else:
                 negLabel = "nonInter"
