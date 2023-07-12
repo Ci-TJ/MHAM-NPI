@@ -47,7 +47,7 @@ def get_data(data_name, seed=1608):
             #Generate neg pairs
             df.loc[2*i + 1] = [rna[x], pro[y], negLabel]
         else:
-            df.loc[i] = [rna_name, protein_name, interaction["label"][i]]
+            df.loc[i] = [rna_name, pro_name, interaction["label"][i]]
             
     df.to_excel("data/{}/{}_group.xlsx".format(data_name, data_name), index=False, header=True)
 
