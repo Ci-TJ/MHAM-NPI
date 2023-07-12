@@ -34,16 +34,22 @@ def get_data(data_name, seed=1608):
         rna_name = interaction["RNA names"][i]
         pro_name = interaction["Protein names"][i]
         all_data.append([interaction["label"][i]] + rna_mer[rna_name] + pro_mer[pro_name])
-        if data_name == 'NPInter2':
+        #if data_name == 'NPInter2':
+        if len(set(interaction["label"])) < 2:
+            if set(interaction["label"])[0] == 1 or set(interaction["label"])[0] == "1":
+                negLabel = "0"
+            else:
+                negLabel = "nonInter"
+            df.loc[2*i] = [rna_name, pro_name, interaction["label"][i]]
             x = np.random.randint(len(rna))
             y = np.random.randint(len(pro))
             all_data.append([0] + rna_mer[rna[x]] + pro_mer[pro[y]])
-            #Generate pos and neg pairs
-            df.loc[i] = [rna[x], pro[y], "0"]
+            #Generate neg pairs
+            df.loc[2*i + 1] = [rna[x], pro[y], negLabel]
+        else:
+            df.loc[i] = [rna_name, protein_name, interaction["label"][i]]
             
-    if data_name == 'NPInter2':
-        df = pd.concat([interaction, df], axis=0)
-        df.to_excel("data/{}/{}_full.xlsx".format(data_name, data_name), index=False, header=True)
+    df.to_excel("data/{}/{}_group.xlsx".format(data_name, data_name), index=False, header=True)
 
     pd_data = pd.DataFrame(all_data)
     pd_data.to_csv("data/{}/sample.txt".format(data_name), sep="\t", columns=None, header=None)
